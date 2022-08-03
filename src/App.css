@@ -1,0 +1,33 @@
+.App {
+  text-align: center;
+  width: 300px;
+}
+
+li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 3px;
+  border-bottom: 1px solid #cccccc;
+}
+
+ul {
+  width: 300px;
+}
+
+button {
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #fcfcfc;
+  outline: #2ad22a solid 1px;
+}
+
+button:hover {
+  background-color: greenyellow;
+}
+
+input[type="text"] {
+  border-radius: 5px;
+  border-width: 1px;
+  height: 20px;
+}
