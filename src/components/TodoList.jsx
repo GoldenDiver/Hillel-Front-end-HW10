@@ -7,10 +7,10 @@ export default function TodosList() {
   const [loader, setLoader] = useState('');
   const [edit, setEdit] = useState();
   const [newTitle, setNewTitle] = useState();
-  
+  const url = "https://612687da3ab4100017a68fd8.mockapi.io/todos";
 
   useEffect(() => {
-    fetch("https://612687da3ab4100017a68fd8.mockapi.io/todos")
+    fetch(url)
       .then((resp) => resp.json())
       .then((data) => setTodos(data))
       .then(setLoader("hidden"))
@@ -27,11 +27,7 @@ export default function TodosList() {
       completed: false,
     };
     setLoader("");
-    fetch("https://612687da3ab4100017a68fd8.mockapi.io/todos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newItem),
-    })
+    fetchUrl(undefined, newItem, "POST")
       .then((resp) => resp.json())
       .then((data) => setTodos((prevTodos) => [...prevTodos, data]))
       .then(setLoader("hidden"))
@@ -41,16 +37,12 @@ export default function TodosList() {
   function onItemClick(id) {
     const item = todos.find((todo) => todo.id === id);
     const newItem = { ...item, completed: !item.completed };
-    fetch("https://612687da3ab4100017a68fd8.mockapi.io/todos" + "/" + id, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newItem),
-    });
+    fetchUrl(id, newItem, "PUT");
     setTodos(todos.map((item) => (item.id === id ? newItem : item)))
   }
 
   function onDeleteButtonClick(id) {
-    fetch("https://612687da3ab4100017a68fd8.mockapi.io/todos" + "/" + id, {
+    fetch(url + "/" + id, {
       method: "DELETE",
     });
     const newTodos = todos.filter((todo) => todo.id !== id);
@@ -59,21 +51,31 @@ export default function TodosList() {
 
   function onEditButtonClick(title, id) {
     const item = todos.find((todo) => todo.id === id);
-    if (edit!==title) {setEdit(title)} else {
+    if (edit!==title) {
+      setEdit(title)
+
+    } else {
       setTitle(newTitle)
       setEdit(undefined)
       const newItem = { ...item, title: newTitle};
-      fetch("https://612687da3ab4100017a68fd8.mockapi.io/todos" + "/" + id, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newItem),
-      });
+      fetchUrl(id, newItem, "PUT");
+      
       setTodos(todos.map((item) => (item.id === id ? newItem : item)))
     } 
   }
 
   function onEditChange(e) {
     setNewTitle(e.target.value)
+  }
+
+  function fetchUrl(id, newItem, method){
+    return (
+      fetch(url + (id===undefined ? "" : ("/" + id)), {
+          method: method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newItem),
+        })
+    )
   }
 
   return (

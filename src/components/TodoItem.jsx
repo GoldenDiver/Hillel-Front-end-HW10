@@ -1,6 +1,9 @@
 import React from "react"
 
 export default function TodoItem({onItemClick, onDeleteButtonClick, onEditButtonClick, isEdit, onEditChange, item: { completed, title, id}}) {
+ function changeTitleBtn () {    
+    return isEdit===title ? "Save" : ("Edit")
+  }
   return (
     <li
       style={{ backgroundColor: getStyle(completed) }}
@@ -19,10 +22,11 @@ export default function TodoItem({onItemClick, onDeleteButtonClick, onEditButton
         onClick={(e) => {
           e.stopPropagation();
           onEditButtonClick(title , id);
+          
         }}
-        title="Edit item"
+        title="Edit"
       >
-        Edit
+        {changeTitleBtn()}
       </button>
       <button
         onClick={(e) => {
